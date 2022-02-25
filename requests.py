@@ -19,27 +19,32 @@ class HTTPRequest(ABC):
 
 class GET(HTTPRequest):
     def execute(self, url: str, params: dict = {}, headers: dict = {}) -> Response:
-        return Response(self.core.get(url=url, params=params, headers=headers))
+        with self.core.get(url=url, params=params, headers=headers) as request:
+            return Response(request)
 
 
 class POST(HTTPRequest):
     def execute(self, url: str, data: dict = {}, headers: dict = {}) -> Response:
-        return Response(self.core.post(url=url, json=data, headers=headers))
+        with self.core.post(url=url, json=data, headers=headers) as request:
+            return Response(request)
 
 
 class PUT(HTTPRequest):
     def execute(self, url: str, data: dict = {}, headers: dict = {}) -> Response:
-        return Response(self.core.put(url=url, data=data, headers=headers))
+        with self.core.put(url=url, data=data, headers=headers) as request:
+            return Response(request)
 
 
 class PATCH(HTTPRequest):
     def execute(self, url: str, data: dict = {}, headers: dict = {}) -> Response:
-        return Response(self.core.patch(url=url, data=data, headers=headers))
+        with self.core.patch(url=url, data=data, headers=headers) as request:
+            return Response(request)
 
 
 class DELETE(HTTPRequest):
     def execute(self, url: str, data: dict = {}, headers: dict = {}) -> Response:
-        return Response(self.core.delete(url=url, data=data, headers=headers))
+        with self.core.delete(url=url, data=data, headers=headers) as request:
+            return Response(request)
 
 
 # -----------------------------------------------------------------------------
@@ -49,7 +54,8 @@ class GETPage(HTTPRequest):
     def execute(self, url: str, page: int, params: dict = {}, headers: dict = {}) -> Response:
         merged_params = copy(params)
         merged_params["page"] = page
-        return Response(self.core.get(url=url, params=merged_params, headers=headers))
+        with self.core.get(url=url, params=merged_params, headers=headers) as request:
+            return Response(request)
 
 
 class GETDetail(HTTPRequest):
@@ -67,7 +73,8 @@ class GETDetail(HTTPRequest):
             Response
         """
         url = f"{base_url}/{id}"
-        return Response(self.core.get(url=url, params=params, headers=headers))
+        with self.core.get(url=url, params=params, headers=headers) as request:
+            return Response(request)
 
 
 class DELETEIdentifier(HTTPRequest):
@@ -85,4 +92,5 @@ class DELETEIdentifier(HTTPRequest):
             Response
         """
         url = f"{base_url}/{id}"
-        return Response(self.core.delete(url=url, headers=headers))
+        with self.core.delete(url=url, headers=headers) as request:
+            return Response(request)
